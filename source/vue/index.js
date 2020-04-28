@@ -1,4 +1,4 @@
-import initMixin from './init.js'
+import { initMixin } from './init.js'
 function Vue(options) {
     this._init(options) // init方法调用相关方法, 此init方法为initMixin挂载在Vue原型上
 }

@@ -6,12 +6,14 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 module.exports = {
     mode: 'development',
     entry:  path.resolve(__dirname, '../src/index.js'),
+    devServer: {
+        contentBase: path.join(__dirname, "dist"),
+        compress: true,
+        port: 8080
+    },
     output:{
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, '../dist'),
-        // library: 'Vue',
-        // libraryTarget: "umd",
-        // globalObject: 'this',
+        path: path.resolve(__dirname, '../dist')
     },
     devtool: 'source-map',
     resolve:{
@@ -19,7 +21,7 @@ module.exports = {
     },
     plugins: [
         // new WebpackHtmlPlugin({
-        //     template: '../public/index.html'
+        //     template: path.resolve(__dirname, '../public/index.html')
         // }),
         new CleanWebpackPlugin(),
     ]
