@@ -30,20 +30,31 @@ function initMethods() {
     console.log('initMethods')
 }
 function initData(vm, opts) {
+    let data = opts.data
     // 处理data， 因为data可以使function, 也可以是Object，需要区别对待处理获取到定义的数据对象
-    const data = typeof opts.data == 'function' ? opts.data() : opts.data
+    data = vm._data = typeof data == 'function' ? data.call(vm) : data
     // 获取到数据后需要给每个数据进行get和set转换，目的是达到响应式数据
     Object.keys(data).forEach((key, i) => {
+        proxy(vm, '_data', key)
         defineReactive(data, key, data[key])
     })
-    
-    console.log('initData')
 }
 function initComputed() {
     console.log('initComputed')
 }
 function initWatched() {
     console.log('initWatched')
+}
+// 将所有数据代理给vm， 方便访问， 比如在vue中调用数据是this.a直接访问
+function proxy(vm, source, key) {
+    Object.defineProperty(vm, key, {
+        get() {
+            return vm[source][key]
+        },
+        set(newVal) {
+            vm[source][key] = newVal
+        }
+    })
 }
 
 
