@@ -22,6 +22,11 @@ export function initState(vm) {
     if (opts.watch) {
         initWatched()
     }
+
+    // 查看是否有el参数， 如果有进行模板编译过程
+    if(opts.el) {
+        vm.$mount(vm)
+    }
 }
 function initProps() {
     console.log('initProps')

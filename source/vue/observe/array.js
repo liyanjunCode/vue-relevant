@@ -8,7 +8,6 @@ export const methods = ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 're
 
 methods.forEach( item => {
     const originMethods = originPorto[item]
-    console.log(item)
     Object.defineProperty(copyOrigin, item, {
         value: function(...args) {
             // 调用数组方法后触发

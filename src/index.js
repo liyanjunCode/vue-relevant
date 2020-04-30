@@ -1,6 +1,6 @@
 import Vue from 'vue'
 const vue = new Vue({
-    el: 'app',
+    el: '#app',
     data() {
         return {
             a: 111,
@@ -8,7 +8,8 @@ const vue = new Vue({
             c: {
                 a: 1,
                 b: 2
-            }
+            },
+            d: '啥看看什么'
         }
     },
     methods: {
