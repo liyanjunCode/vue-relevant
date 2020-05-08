@@ -4,7 +4,7 @@ const startTagOpen = new RegExp(`^<${qnameCapture}`); // 标签开头的正则 �
 const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`); // 匹配标签结尾的 </div>
 const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/; // 匹配属性的
 const startTagClose = /^\s*(\/?)>/; // 匹配标签结束的 >
-const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g
+export const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g
 // ast的根节点
 let root = null
 // 记录当前处理的标签
@@ -68,6 +68,7 @@ export function parseHTML(template) {
                 })
                 advance(attr[0].length)
             }
+            
             // 开始标签结束将标签名和属性数组 传递出去
             if(end) {
                 advance(end[0].length)
@@ -112,7 +113,7 @@ function chars(text) {
     if(text) {
         currentParent.children.push({
             text,
-            TYPE: TEXT_TYPE
+            type: TEXT_TYPE
         })
     }
      

@@ -5,11 +5,14 @@ export function initMixin(Vue) {
         const vm = this;
         vm.$options = options
         initState(vm)
+        if(vm.$options.el) {
+            vm.$mount(vm.$options.el)
+        }
     }
-    Vue.prototype.$mount = function(vm){
+    Vue.prototype.$mount = function(el){
+        const vm = this
         const options = vm.$options
         let template = options.template
-        const el = options.el
         // 编译的三个条件1.render函数 2. el 3. tmeplate模板
         // render函数不存在说明要编译模板， 如果存在render函数不需处理
         if(!options.render) {
@@ -23,9 +26,10 @@ export function initMixin(Vue) {
                     template = document.querySelector(template).innerHTML
                 }
             }
+            // 将template转换为render函数
+            const render = compileToFunction(template)
+            options.render = render
         }
-        // 将template转换为render函数
-        const render = compileToFunction(template)
-       
+        
     }
 }
