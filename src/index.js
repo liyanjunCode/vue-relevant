@@ -16,4 +16,6 @@ const vue = new Vue({
 
     }
 })
-vue.b.push('s')
+setTimeout(() => {
+    vue.d = 'gaibianle'
+}, 1000)

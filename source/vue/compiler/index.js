@@ -18,13 +18,13 @@ function gen(el) {
         while((matchItem=defaultTagRE.exec(text))) {
             index =matchItem.index
             if(index > lastIndex) {
-                tokens.push(`${text.slice(lastIndex, index)}`)
+                tokens.push(`"${text.slice(lastIndex, index)}"`)
             }
             tokens.push(`_s(${matchItem[1].trim()})`)
             lastIndex = index + matchItem[0].length
         }
         if(lastIndex < text.length) {
-            tokens.push(`${text.slice(lastIndex)}`)
+            tokens.push(`"${text.slice(lastIndex)}"`)
         }
         return `_v(${tokens.join('+')})`
     }
@@ -42,7 +42,7 @@ function gendata(attrs) {
             let len = itemvalue.length - 1;
             while(len--) {
                 const elArr = itemvalue[len].split(':')
-                styleVal[elArr[0]] = elArr[1]
+                styleVal[elArr[0].trim()] = elArr[1]
             }
             item.value = styleVal
         }
@@ -52,7 +52,7 @@ function gendata(attrs) {
 }
 function generate(root) {
     const children = genaraChild(root.children)
-    let code = `_c(${root.tagName}, ${root.attr.length ? gendata(root.attr) : undefined}, ${children ? children : ''})`
+    let code = `_c("${root.tagName}", ${root.attr.length ? gendata(root.attr) : undefined}, ${children ? children : ''})`
     return code
 }
 

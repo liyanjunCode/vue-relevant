@@ -1,5 +1,6 @@
 
 import { copyOrigin, methods } from './array.js'
+import Dep from './dep.js'
 // 进行转换get和set前的的处理， 区分Object和Array数据观测分类处理
 export class Observer {
     constructor(value) {
@@ -33,16 +34,20 @@ export class Observer {
 }
 // 对数据进行get和set的具体转换
 export function defineReactive(data, key, value) {
+    const dep = new Dep()
     // 递归
     observe(value)
     Object.defineProperty(data, key, {
         get() {
             // 处理依赖收集逻辑
+            dep.depend()
             return value
         },
         set(newVal) {
             // 处理数据更新及新增数据的get， set转换
             if(newVal === value) return
+            value = newVal
+            dep.notify()
         }
     })
 }
