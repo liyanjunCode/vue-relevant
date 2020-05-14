@@ -8,7 +8,7 @@ export function initRender(Vue) {
         return createTextNode(text)
     }
     Vue.prototype._s = function(val) {
-        return val == null ? '' : typeof val === 'Object' ? JSON.stringify(value) : val
+        return val == null ? '' : typeof val === 'object' ? JSON.stringify(val) : val
     }
     Vue.prototype._render = function() {
         const vm = this;

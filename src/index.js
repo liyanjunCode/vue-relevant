@@ -12,10 +12,26 @@ const vue = new Vue({
             d: '啥看看什么'
         }
     },
+    watch: {
+        d: function(newVal, oldVal) {
+            console.log(newVal, oldVal, '用户函数')
+        },
+        c: {
+            handler : function(newVal, oldVal){
+                console.log(newVal, oldVal, '用户对象')
+            },
+            immediate: true,
+            deep: true
+        }
+    },
     methods: {
 
     }
 })
-setTimeout(() => {
-    vue.d = 'gaibianle'
+setTimeout(()=>{
+    vue.d= {
+        a: '我是a',
+        b: '我是b'
+    }
+    vue.b[0].push(9)
 }, 1000)

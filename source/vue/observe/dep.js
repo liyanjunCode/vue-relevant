@@ -7,8 +7,9 @@ class Dep {
     }
     // 收集依赖
     depend() {
-        // this.subs.push(Dep.target)
-        Dep.target.addSub(this)
+        if(Dep.target) {
+            Dep.target.addSub(this)
+        }
     }
     addDep(watcher) {
         this.subs.push(watcher)

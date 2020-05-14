@@ -2,10 +2,10 @@ import { pushStack, popStack } from './dep.js'
 
 let id = 0
 export default class Watcher {
-    constructor(vm, exp, cb, opts){
+    constructor(vm, expOrFn, cb, opts){
         this.id = id++
         this.cb = cb
-        this.exp = exp
+        this.getter = expOrFn
         this.deps = []
         this.depId = new Set()
         // 标识用户写的watch
@@ -17,7 +17,7 @@ export default class Watcher {
         const oldVal = this.value
         // 获取值之前，将Dep.target设置为this用于收集依赖，收集完重置为null
         pushStack(this)
-        this.value = this.exp()
+        this.value = this.getter()
         popStack(this)
         // 用户写的wathcer 执行回调函数
         if(this.user) {

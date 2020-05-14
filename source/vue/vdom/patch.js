@@ -1,5 +1,5 @@
 
-export function patch(oldVdom, vdom) {
+export function __patch__(oldVdom, vdom) {
     const isRealEl = oldVdom.nodeType
     if(isRealEl) {
         const parent = oldVdom.parentNode
@@ -7,7 +7,7 @@ export function patch(oldVdom, vdom) {
         parent.insertBefore(el, oldVdom.nextSibling)
         parent.removeChild(oldVdom)
     } else {
-        console.log(oldVdom.el, vdom)
+        patch(oldVdom, vdom)
     }
 }
 function createEle(vdom) {
@@ -23,7 +23,7 @@ function createEle(vdom) {
     }
     return vdom.el
 }
-function updateProptes(vdom) {
+function updateProptes(vdom, odlProps={}) {
     const { el, data} = vdom
     for( let name in data) {
         if(name === 'style') {
@@ -35,5 +35,11 @@ function updateProptes(vdom) {
         } else {
             el.setAttribute(name, data[name])
         }
+    }
+}
+function patch(oldVdom, vdom){
+    if(oldVdom.tag === vdom.tag) {
+        const parent = oldVdom.el.parentNode
+        parent.replaceChild(createEle(vdom),  oldVdom.el)
     }
 }

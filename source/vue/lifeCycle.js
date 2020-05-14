@@ -1,5 +1,5 @@
 import Wacther from './observe/watcher.js'
-import { patch } from './vdom/patch.js'
+import { __patch__ } from './vdom/patch.js'
 // 挂在组件视图
 export function mountComponent(vm, el) {
     vm.$el = el
@@ -16,9 +16,9 @@ export function initLifeCycle(Vue) {
         vm._vnode = vnode
         // 原来无虚拟dom 第一个参数需传真实的dom
         if(!prevVnode) {
-            patch(vm.$el, vnode)
+            __patch__(vm.$el, vnode)
         } else {
-            patch(prevVnode, vnode)
+            __patch__(prevVnode, vnode)
         }
         
     }

@@ -4,6 +4,7 @@ import Dep from './dep.js'
 // 进行转换get和set前的的处理， 区分Object和Array数据观测分类处理
 export class Observer {
     constructor(value) {
+        this.dep = new Dep()
         Object.defineProperty(value, "__ob__", {
             enum: false,
             configurable: false,
@@ -36,17 +37,26 @@ export class Observer {
 export function defineReactive(data, key, value) {
     const dep = new Dep()
     // 递归
-    observe(value)
+    const childOb = observe(value)
     Object.defineProperty(data, key, {
         get() {
             // 处理依赖收集逻辑
             dep.depend()
+            // 对数组进行依赖收集
+            if(childOb) {
+                childOb.dep.depend()
+                // 对数组中的数组进行依赖收集
+                if(Array.isArray(value)) {
+                    dependArray(value)
+                }
+            }
             return value
         },
         set(newVal) {
             // 处理数据更新及新增数据的get， set转换
             if(newVal === value) return
             value = newVal
+            observe(value)
             dep.notify()
         }
     })
@@ -54,12 +64,21 @@ export function defineReactive(data, key, value) {
 function observe(value) {
     // 如果是对象或数组，就进入Observer方法递归进行get和set的转换
     if(typeof value !== "object" || typeof value === null) { return }
-
     if(value.__ob__) {
         return value.__ob__
     } else {
-        new Observer(value)
-    }   
+        return new Observer(value)
+    } 
+}
+// 收集数组中的数组依赖， 递归处理
+function dependArray(val) {
+    for(let i=0; i<val.length; i++){
+        let e = val[i]
+        e.__ob__ && e.__ob__.dep.depend()
+        if(Array.isArray(e)) {
+            dependArray(e)
+        }
+    }
 }
 // 挂载到原型
 function protoAgument (val, proto) {

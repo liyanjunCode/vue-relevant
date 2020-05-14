@@ -20,7 +20,7 @@ export function initState(vm) {
     }
     // 初始化watched
     if (opts.watch) {
-        initWatched()
+        initWatched(vm, opts.watch)
     }
 }
 function initProps() {
@@ -42,8 +42,31 @@ function initData(vm, opts) {
 function initComputed() {
     console.log('initComputed')
 }
-function initWatched() {
-    console.log('initWatched')
+function initWatched(vm, watch) {
+    // 写法， 数组， 函数， 对象
+    // 取出写的watcher的key
+    for(let key in watch) {
+        const handler = watch[key];
+        if(Array.isArray(handler)) {
+            for(let i=0; i<handler.length; i++) {
+                createWatcher(vm,key, handler[i])
+            }
+        } else {
+            createWatcher(vm,key, handler)
+        }
+    }
+}
+function createWatcher(vm, key, handler, options={}){
+    // 如果是对象,需取出回调函数
+    if(!typeof handler === 'function') {
+        options= handler
+        handler = handler.handler
+    }
+    // 如果是字符串，就是methods中的方法， 需要将方法通过vm取出
+    if(typeof handler === 'string') {
+        handler = vm[handler]
+    }
+    // return vm.$watch(vm,key, handler, options)
 }
 // 将所有数据代理给vm， 方便访问， 比如在vue中调用数据是this.a直接访问
 function proxy(vm, source, key) {

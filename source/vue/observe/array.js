@@ -11,7 +11,7 @@ methods.forEach( item => {
     Object.defineProperty(copyOrigin, item, {
         value: function(...args) {
             // 调用数组方法后触发
-            originMethods.call(this, args)
+            originMethods.call(this, ...args)
             const ob = this.__ob__  // 新增
             let insert;
             // 判断方法
@@ -24,10 +24,8 @@ methods.forEach( item => {
                     insert = args.slice(2)
                     break
             }
-            
             insert && ob.observeArray(insert) // 新增
-            
-            
+            ob.dep.notify()
         },
         enum: false,
         configurable: false,
