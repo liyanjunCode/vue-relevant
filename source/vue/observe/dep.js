@@ -20,6 +20,11 @@ class Dep {
             watcher.update()
         })
     }
+    // 删除收集的watcher
+    removeSub(wach) {
+        const index = this.subs.indexOf(wach)
+        this.subs.splice(index, 1)
+    }
 
 }
 // 栈用于存储当前正在获取值的watcher

@@ -9,29 +9,49 @@ const vue = new Vue({
                 a: 1,
                 b: 2
             },
-            d: '啥看看什么'
+            d: '啥看看什么',
+            first: '李',
+            last: '艳军'
+        }
+    },
+    computed: {
+        firstName() {
+            return this.first + this.last
         }
     },
     watch: {
-        d: function(newVal, oldVal) {
-            console.log(newVal, oldVal, '用户函数')
-        },
-        c: {
-            handler : function(newVal, oldVal){
-                console.log(newVal, oldVal, '用户对象')
-            },
-            immediate: true,
-            deep: true
-        }
+        // d: function(newVal, oldVal) {
+        //     console.log(newVal, oldVal, '用户函数c')
+        // }
+        // d: {
+        //     handler: function(newVal, oldVal) {
+        //         console.log(newVal, oldVal, '用户函数d')
+        //     },
+        //     immediate: true
+        // }
+        // d: [
+        //     {handler: 'aa',immediate: true,
+        //     deep: true}
+        // ]
     },
     methods: {
-
+        aa() {
+            console.log('aa')
+        }
     }
 })
+// const unwatch = vue.$watch('d', function(newvalue, oldVal){
+//     console.log(newvalue, oldVal, '1111')
+// })
 setTimeout(()=>{
     vue.d= {
         a: '我是a',
         b: '我是b'
     }
-    vue.b[0].push(9)
 }, 1000)
+setTimeout(()=>{
+    vue.d= {
+        a: '我是c',
+        b: '我是d'
+    }
+}, 2000)

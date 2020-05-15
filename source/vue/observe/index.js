@@ -58,7 +58,9 @@ export function defineReactive(data, key, value) {
             value = newVal
             observe(value)
             dep.notify()
-        }
+        },
+        enum: true,
+        configurable: true,
     })
 }
 function observe(value) {
