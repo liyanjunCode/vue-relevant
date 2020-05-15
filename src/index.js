@@ -43,15 +43,18 @@ const vue = new Vue({
 // const unwatch = vue.$watch('d', function(newvalue, oldVal){
 //     console.log(newvalue, oldVal, '1111')
 // })
+// setTimeout(()=>{
+//     vue.d= {
+//         a: '我是a',
+//         b: '我是b'
+//     }
+// }, 1000)
+// setTimeout(()=>{
+//     vue.d= {
+//         a: '我是c',
+//         b: '我是d'
+//     }
+// }, 2000)
 setTimeout(()=>{
-    vue.d= {
-        a: '我是a',
-        b: '我是b'
-    }
-}, 1000)
-setTimeout(()=>{
-    vue.d= {
-        a: '我是c',
-        b: '我是d'
-    }
+    vue.first= 'li'
 }, 2000)

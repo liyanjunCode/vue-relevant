@@ -35,7 +35,7 @@ export default class Watcher {
         }
     }
     evalue() {
-        this.value = this.get()
+        this.get()
         this.dirty = false
     }
     // 更新视图逻辑
