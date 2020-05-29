@@ -1,5 +1,5 @@
 import { pushStack, popStack } from './dep.js'
-
+import { queueWatcher } from './scheduler.js'
 let id = 0
 export default class Watcher {
     constructor(vm, expOrFn, callback, opts){
@@ -29,10 +29,6 @@ export default class Watcher {
         pushStack(this)
         this.value = this.getter.call(vm)
         popStack(this)
-        // 用户写的wathcer 执行回调函数
-        if(this.user) {
-            this.callback(this.value, oldVal)
-        }
     }
     evalue() {
         this.get()
@@ -44,9 +40,16 @@ export default class Watcher {
         if(this.lazy) {
             this.dirty = true
         } else {
-            this.get()
+            queueWatcher(this) 
         }
        
+    }
+    run(){
+        this.get()
+        // 用户写的wathcer 执行回调函数
+        if(this.user) {
+            this.callback.call(this.vm, this.value, oldVal)
+        }
     }
     // 存储dep并把wacher存入dep
     addSub(dep) {

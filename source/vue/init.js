@@ -111,7 +111,6 @@ function createComputedGetter(vm, key){
             // 值改变， 先通知计算属性watcher求值， 再通知渲染函数， 重新渲染界面
             wacher.depend()
         }
-        console.log(wacher)
         return wacher.value
     }
 }
@@ -130,6 +129,7 @@ function initWatched(vm, watch) {
         }
     }
 }
+// 此函数本质就是处理写法格式， 最根本是调用$watch创建用户watcher
 export function createWatcher(vm, key, handler, options={}){
     // 如果是对象,需取出回调函数
     if(typeof handler !== 'function') {
