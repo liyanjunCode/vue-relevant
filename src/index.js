@@ -55,7 +55,7 @@ const vue = new Vue({
 // 移动元素 d a b c 
 // const vnode = h('div', {a:222, b: 222, style:{color: 'blue'}}, h('div', {key:'d'}, 'd'), h('div', {key:'a'}, 'a'),h('div', {key:'b'}, 'b'), h('div', {key:'c'}, 'c'))
 // 移动元素 e d b c f
-const vnode = h('div', {a:222, b: 222, style:{color: 'blue'}}, h('div', {key:'e'}, 'e'), h('div', {key:'d'}, 'd'),h('div', {key:'b'}, 'b'), h('div', {key:'c'}, 'c'), h('div', {key:'c'}, 'c'))
+const vnode = h('div', {a:222, b: 222, style:{color: 'blue'}}, h('div', {key:'e'}, 'e'), h('div', {key:'d'}, 'd'),h('div', {key:'b'}, 'bb'), h('div', {key:'c'}, 'c'), h('div', {key:'f'}, 'f'))
 setTimeout(() => {
     vue._patch(vnode)
 }, 1000)

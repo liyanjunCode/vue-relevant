@@ -65,6 +65,10 @@ function patch(oldVdom, vdom){
         oldEl.parentNode.replaceChild(createEle(vdom), oldEl)
         return
     }
+    // console.log(typeof vdom.text !== 'undefined', typeof vdom.text, vdom)
+    // if( typeof vdom.text !== 'undefined') {
+    //     return console.log(typeof vdom.text, vdom.text, 111)
+    // }
     // 节点一样, 不需要创建元素， 从老的vnode中获取到原有元素， 存储在行vnode中
     let docEl = vdom.el = oldVdom.el
     // 1 更新当前节点属性
@@ -101,7 +105,14 @@ function updateChilren(parent, newChildren, oldChilren) {
 
     // 进行循环对比, 新老虚拟dom有一方的开始序列大于结束序列， 说明有一方已经遍历完了
     while(newStartIdx <= newEndIdx && oldStartIdx <= oldEndIdx) { // 新虚拟dom的开始序列大于结束序列时， 新的dom已经遍历完，结束循环对比
-        if(isSameVnode(oldStartChild,newStartChild)){ 
+        let oldKeyToindex = creatKeyToIndexMap(oldChilren);
+        if(!oldStartChild){
+            // 这里处理在最后一种大乱斗对比时，将后面元素移动但前面时，原有位置设置为了undefined的情况
+            oldStartChild = oldChilren[++oldStartIdx];
+        }else if(!oldEndChild){
+             // 同上，这里处理在最后一种大乱斗对比时，将后面元素移动但前面时，原有位置设置为了undefined的情况
+            oldEndChild = oldChilren[--oldEndIdx];
+         } else if(isSameVnode(oldStartChild,newStartChild)){ 
             // 需要递归处理子元素
             patch(oldStartChild, newStartChild);
             // 处理向后添加元素的情景
@@ -131,7 +142,27 @@ function updateChilren(parent, newChildren, oldChilren) {
             newStartChild = newChildren[++newStartIdx];
         } else {
             // 大乱斗
-            break;
+            let newKey = newStartChild.key
+            let moveItemIndex = oldKeyToindex[newKey]
+            // key和index的映射无值， 说明是新增的元素
+            if(moveItemIndex == null) { 
+                //此节点没有key值，直接当做新元素插入到原有dom的第一个前面
+                parent.insertBefore(createEle(newStartChild), oldStartChild.el)
+            } else { 
+                // 需区分情况， 这里可能key值一样， 但是元素的标签改变了,标签变了直接用新元素替换
+                let moveItem = oldChilren[moveItemIndex]
+                if(moveItem.tag !== newStartChild.tag) {
+                    // 标签不一样， 直接重新构建元素
+                    parent.insertBefore(createEle(newStartChild), oldStartChild.el)
+                } else {
+                    patch(moveItem, newStartChild);
+                    // 移动了的元素设置为undefined， 对比时直接跳过
+                    oldChilren[moveItemIndex] = undefined;
+                    parent.insertBefore(moveItem.el, oldStartChild.el)
+                } 
+            }
+            // 新节点开始指针向后移动
+            newStartChild = newChildren[++newStartIdx]
         }
     }
     // 对于对比结束后， 新的虚拟dom对比完还有节点的处理， 向父元素添加新子节点
@@ -141,10 +172,26 @@ function updateChilren(parent, newChildren, oldChilren) {
             parent.insertBefore(createEle(newChildren[i]), nextEl)
         }   
     }
-
+    // 对比结束， 老节点还存在， 需要将老节点删除
+    if(oldStartIdx <= oldEndIdx) {
+        for(let i=oldStartIdx; i<=oldEndIdx; i++) {
+            let oldItem = oldChilren[i];
+            // 移动时有的元素可能被设置为undefined了， 所以防止报错
+            oldItem && parent.removeChild(oldItem.el)
+        }   
+    }
 }
 // 判断虚拟节点是否相同
 function isSameVnode(a, b) {
     // key如果没设置前后dom可能都没设置， 如果旧dom设置了， 新dom没设置， 就按按不同的节点走
     return a.key == b.key && a.tag == b.tag
+}
+// 创建一个老的虚拟dom的key和index的映射，当时乱序时，用当前的新虚拟dom的key值去找旧的虚拟dom在原来的位置
+function creatKeyToIndexMap(children) {
+    let map = {};
+    for(let i=0; i< children.length; i++) {
+        const key = children[i] && children[i].key;
+        key && (map[key] = i)
+    }
+    return map
 }
