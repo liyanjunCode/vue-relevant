@@ -90,6 +90,7 @@ setTimeout(() => {
 //         b: '我是d3'
 //     }
 // }, 3000)
+// 调试计算属性
 // setTimeout(()=>{
 //     vue.first= 'li'
 // }, 2000)
