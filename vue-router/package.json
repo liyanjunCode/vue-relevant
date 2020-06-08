@@ -44,7 +44,8 @@
       "indent": [
         "warn",
         4
-      ]
+      ],
+      "no-unused-vars": "off"
     },
     "globals": {
       "Toast": true
