@@ -5,6 +5,7 @@ const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`); // 匹配标签结尾�
 const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/; // 匹配属性的
 const startTagClose = /^\s*(\/?)>/; // 匹配标签结束的 >
 export const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g
+// ｛｛1｝｝
 // ast的根节点
 let root = null
 // 记录当前处理的标签
@@ -19,16 +20,23 @@ export function parseHTML(template) {
     // 定义ast抽象语法树的根
     while(html) {
         // 获取尖角号的位置
-        let endIndex = html.indexOf('<')
+        // 0
+        let endIndex = html.indexOf('<') 
         // 如果等于0 说明是标签开始或结束的地方
         if(endIndex == 0) {
             // 匹配开始标签的标签名和属性
+            // {
+            //     tag: 'div',
+            //     attr: [a:1, b:1]
+            // }
             const startMatch = parseStartTag()
             // 匹配到结果， 转为ast
             if(startMatch) {
                 start(startMatch)
                 continue
             }
+
+
             // 匹配到结束，截取字符串并建立ast的父子级关系
             let endMatch;
             if(endMatch = html.match(endTag)) {
@@ -50,6 +58,13 @@ export function parseHTML(template) {
     }
     function parseStartTag() {
         // 匹配开始标签
+    //         <div id="aa" bb ="nn">
+    //     <div>222</idv>
+    // </div>
+    // id="aa" bb ="nn"
+
+    // <div
+        // <div  div
         const start = html.match(startTagOpen)
         // 匹配有结果
         if (start) {
@@ -61,6 +76,7 @@ export function parseHTML(template) {
             advance(start[0].length)
             // 循环处理属性
             let end, attr;
+            // >
             while(!(end = html.match(startTagClose)) && (attr = html.match(attribute))) {
                 match.attrs.push({
                     name: attr[1],
@@ -68,7 +84,8 @@ export function parseHTML(template) {
                 })
                 advance(attr[0].length)
             }
-            
+    //     <div>222</idv>
+    // </div>
             // 开始标签结束将标签名和属性数组 传递出去
             if(end) {
                 advance(end[0].length)
@@ -96,6 +113,7 @@ function start(start) {
 function end(end) {
     // 拿出当前解析的标签
     const element = stack.pop()
+
     if(element.tagName == end) {
         // 拿出当前栈中的父级标签
         currentParent = stack[stack.length - 1]
@@ -127,3 +145,4 @@ function createAstElemnt(tag, attr, type) {
         children: []
     }
 }
+// 处理开始标签， 处理属性， 处理结束标签，处理文本

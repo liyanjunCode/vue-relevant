@@ -43,9 +43,11 @@ const vue = new Vue({
     },
     render: function(){
         // a b c d
+        // return h('div', {a:'11', style:{color: 'red', 'font-size': '20px'}}, 111)
         return h('div', {a:'11', style:{color: 'red', 'font-size': '20px'}}, h('div', {key:'a'}, 'a'),h('div', {key:'b'}, 'b'), h('div', {key:'c'}, 'c'), h('div', {key:'d'}, 'd'))
     }
 })
+// const vnode = h('span', {a:222, b: 222, style:{color: 'blue'}}, 222)
 // 向后插入元素 a b c d e f
 // const vnode = h('div', {a:222, b: 222, style:{color: 'blue'}}, h('div', {key:'a'}, 'a'),h('div', {key:'b'}, 'b'), h('div', {key:'c'}, 'c'), h('div', {key:'d'}, 'd'), h('div', {key:'e'}, 'e'), h('div', {key:'f'}, 'f'))
 // 向前插入元素 f e a b c d

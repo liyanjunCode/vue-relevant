@@ -1,10 +1,11 @@
 
 export function __patch__(oldVdom, vdom) {
+    // oldVdom   真实节点 第一次渲染
+    // 对象， 虚拟dom    1 3 7
     const isRealEl = oldVdom.nodeType
     // 如果oldVdom是节点元素， 就创建直接替换， 因为是第一次渲染
     if(isRealEl) {
         const parent = oldVdom.parentNode
- 
         const el = createEle(vdom)
         parent.insertBefore(el, oldVdom.nextSibling)
         parent.removeChild(oldVdom)
@@ -45,7 +46,6 @@ function updateProptes(vdom, odlProps={}) {
         }
     }
 
-    // 属性添加
     for( let name in data) {
         if(name === 'style') {
             for( let styleName in data.style) {
@@ -60,7 +60,7 @@ function updateProptes(vdom, odlProps={}) {
 }
 function patch(oldVdom, vdom){
     // 节点一样
-    if(oldVdom.tag !== vdom.tag) {
+    if(oldVdom.tag !== vdom.tag) {     
         const oldEl = oldVdom.el
         oldEl.parentNode.replaceChild(createEle(vdom), oldEl)
         return

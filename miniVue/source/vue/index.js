@@ -7,7 +7,11 @@ function Vue(options) {
 }
 
 initMixin(Vue) // 给原型上新增_init方法
+
+
+
 stateMixin(Vue) // 挂在$watch $delete $set
-initLifeCycle(Vue)
-initRender(Vue)
+
+initLifeCycle(Vue)  // 挂载_patch方法
+initRender(Vue)   // 挂载在_c、_v、_s、_render
 export default Vue

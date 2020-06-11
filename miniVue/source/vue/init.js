@@ -8,8 +8,10 @@ export function initMixin(Vue) {
     Vue.prototype._init = function(options) {
         const vm = this;
         vm.$options = options
-        initState(vm)
+        initState(vm) // 数据响应式转换
+
         if(vm.$options.el) {
+            // 挂载界面
             vm.$mount(vm.$options.el)
         }
     }
@@ -29,11 +31,12 @@ export function initMixin(Vue) {
                 // 只需对id选择器情况处理即可
                 if(~template.indexOf('#')) {
                     el = document.querySelector(template)
-                    template = el.innerHTML
+                    template = el.innerHTML     
                 }
             }
             // 将template转换为render函数
             const render = compileToFunction(template)
+
             options.render = render
         }
         mountComponent(vm, el)
@@ -74,7 +77,13 @@ function initData(vm, opts) {
     data = vm._data = typeof data == 'function' ? data.call(vm) : data
     // 获取到数据后需要给每个数据进行get和set转换，目的是达到响应式数据
     Object.keys(data).forEach((key, i) => {
+        // 设置代理
+        // vm._data   this._data.l
         proxy(vm, '_data', key)
+        // {
+        //     l: arguments,
+        //     aa: []
+        // }
         defineReactive(data, key, data[key])
     })
 }
