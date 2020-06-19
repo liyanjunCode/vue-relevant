@@ -10,7 +10,11 @@ export class Observer {
             configurable: false,
             value: this
         })
+        // a = [3, 4, 5]
+        // a.__ob__ = new Observer().dep
+        //  this.dep 是为了数组
         if (Array.isArray(value)) {
+            // 
             //处理数组的情况
             '__proto__' in Object ? protoAgument(value, copyOrigin) : copyAgument(value, methods, copyOrigin)
             // 处理数组的递归监测
@@ -35,8 +39,16 @@ export class Observer {
 }
 // 对数据进行get和set的具体转换
 export function defineReactive(data, key, value) {
+    // dep数组不能用
     const dep = new Dep()
     // 递归
+    // push pop
+    // __ob__
+    // data : {
+    //     a: ,
+    //     b: 2
+    // }
+    
     const childOb = observe(value)
     Object.defineProperty(data, key, {
         get() {
@@ -46,7 +58,9 @@ export function defineReactive(data, key, value) {
             if(childOb) {
                 childOb.dep.depend()
                 // 对数组中的数组进行依赖收集
+                // [, 6]
                 if(Array.isArray(value)) {
+                    // [3, 4, 5]
                     dependArray(value)
                 }
             }
@@ -85,6 +99,7 @@ function dependArray(val) {
 // 挂载到原型
 function protoAgument (val, proto) {
     val.__proto__ = proto
+    // [2, 4, 6].push()
 }
 // 暴力挂载到value
 function copyAgument (val, keys, source) {

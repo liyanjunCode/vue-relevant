@@ -89,6 +89,7 @@ function initData(vm, opts) {
 }
 function initComputed(vm, computed) {
     // 创建对象存储computed到vm实例
+    // 渲染watcher （组件）   用户watcher  computed（watcher）
    const watchers = vm.computedWatchers = Object.create(null);
     // 取出每个computed
     for(let key in computed) {
@@ -96,8 +97,9 @@ function initComputed(vm, computed) {
         // 可能是函数， 也可能用户写了getter
         userGet = typeof userGet == 'function' ? userGet : userGet.get
         // 创建存储计算属性watcher， lazy标识是计算属性
+        // this.fullName = this.firstName + this.lastName
         watchers[key] = new Watcher(vm, userGet,()=>{}, {lazy: true})
-        //
+        // this.fullname
         Object.defineProperty(vm, key, {
             configurable: true,
             enumerable: true,

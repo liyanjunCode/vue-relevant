@@ -60,33 +60,35 @@ function updateProptes(vdom, odlProps={}) {
 }
 function patch(oldVdom, vdom){
     // 节点一样
-    if(oldVdom.tag !== vdom.tag) {     
-        const oldEl = oldVdom.el
-        oldEl.parentNode.replaceChild(createEle(vdom), oldEl)
-        return
-    }
+    const oldEl = oldVdom.el
+    oldEl.parentNode.replaceChild(createEle(vdom), oldEl)
+    // if(oldVdom.tag !== vdom.tag) {     
+    //     const oldEl = oldVdom.el
+    //     oldEl.parentNode.replaceChild(createEle(vdom), oldEl)
+    //     return
+    // }
     // console.log(typeof vdom.text !== 'undefined', typeof vdom.text, vdom)
     // if( typeof vdom.text !== 'undefined') {
     //     return console.log(typeof vdom.text, vdom.text, 111)
     // }
     // 节点一样, 不需要创建元素， 从老的vnode中获取到原有元素， 存储在行vnode中
-    let docEl = vdom.el = oldVdom.el
-    // 1 更新当前节点属性
-    updateProptes(vdom, oldVdom.data)
-    const newChildren = vdom.children;
-    const oldChilren = oldVdom.children;
-    if(newChildren.length > 0 && oldChilren.length > 0) {
-        // 新老dom都存在子元素， 最复杂， 需要进行dom对比
-        updateChilren(docEl, newChildren, oldChilren)
-    } else if(newChildren.length > 0) {
-        // 新元素有子元素， 老的没有子元素， 只需将新的子元素append到当前元素即可
-        for(let i=0; i< newChildren.length;i++) {
-            docEl.appendChild(createEle(newChildren[i]))
-        } 
-    } else {
-        // 旧元素有子元素， 新元素没子元素， 将dom的子元素清除
-        docEl.innerHTML = ''
-    }
+    // let docEl = vdom.el = oldVdom.el
+    // // 1 更新当前节点属性
+    // updateProptes(vdom, oldVdom.data)
+    // const newChildren = vdom.children;
+    // const oldChilren = oldVdom.children;
+    // if(newChildren.length > 0 && oldChilren.length > 0) {
+    //     // 新老dom都存在子元素， 最复杂， 需要进行dom对比
+    //     updateChilren(docEl, newChildren, oldChilren)
+    // } else if(newChildren.length > 0) {
+    //     // 新元素有子元素， 老的没有子元素， 只需将新的子元素append到当前元素即可
+    //     for(let i=0; i< newChildren.length;i++) {
+    //         docEl.appendChild(createEle(newChildren[i]))
+    //     } 
+    // } else {
+    //     // 旧元素有子元素， 新元素没子元素， 将dom的子元素清除
+    //     docEl.innerHTML = ''
+    // }
 
     // 此处是用于调试用的着
     // const oldEl = oldVdom.el

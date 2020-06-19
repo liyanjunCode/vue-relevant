@@ -1,11 +1,12 @@
 <template>
   <div class="aaa">
       a
+      <slot name="head"></slot>
   </div>
 </template>
 <script lang="ts">
 import { Vue } from "vue-property-decorator";
-export default  Vue.extend({
+export default  {
     name: 'aaa',
     data() {
         return {
@@ -27,9 +28,9 @@ export default  Vue.extend({
        
     },
     mounted() {
-
+        
     }
-})
+}
 </script>
 <style>
 *{

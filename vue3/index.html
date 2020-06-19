@@ -19,9 +19,9 @@
         })
         
         const doubleNum = computed(() => o.num * 2)
-
+        console.log(doubleNum, 777)
         effect(() => {
-            root.innerHTML = `<div>点击次数${o.num};点击次数double${doubleNum}</div>`
+            root.innerHTML = `<div>点击次数${o.num};点击次数double${doubleNum.value}</div>`
         })
         button.addEventListener('click', function(){
             o.num++;

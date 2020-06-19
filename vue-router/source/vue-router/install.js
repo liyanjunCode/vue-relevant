@@ -23,7 +23,7 @@ export function install(Vue) {
     //注册全局组件router-view和router-link
     Vue.component('router-view', {
         render() {
-            return <div>1111</div>
+            return <div></div>
         }
     })
     Vue.component('router-link', {
