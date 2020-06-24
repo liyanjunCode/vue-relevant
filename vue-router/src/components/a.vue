@@ -1,7 +1,6 @@
 <template>
   <div class="aaa">
-      a
-      <slot name="head"></slot>
+      这是啊页面
   </div>
 </template>
 <script lang="ts">

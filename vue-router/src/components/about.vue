@@ -1,21 +1,17 @@
 <template>
   <div class="about">
-      about
-      <asd></asd>
+      <span>about页面</span>
+     <router-view></router-view>
   </div>
 </template>
 <script lang="ts">
 import { Vue } from "vue-property-decorator";
-import asd from './a.vue'
 export default  Vue.extend({
     name: 'about',
     data() {
         return {
            
         }
-    },
-    components: {
-        asd
     },
     watch: {
 

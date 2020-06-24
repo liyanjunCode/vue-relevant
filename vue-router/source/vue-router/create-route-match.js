@@ -1,10 +1,12 @@
 function addRouteRecord(route, pathList, pathMap, parentRecord){
     // 这里可能父组件下有子组件， 上下关联的组件， 子组件需要将父组件的路径拼接上
     const path = parentRecord ? `${parentRecord.path}${route.path}` : route.path;
+    
     // 路由映射记录
     const record = {
         path,
-        component: route.component
+        component: route.component,
+        parentRecord
     }
     // 如果数据为添加过才添加， 防止用户重复书写相同名称覆盖
     if(!pathMap[path]) {
@@ -14,7 +16,7 @@ function addRouteRecord(route, pathList, pathMap, parentRecord){
     // 如果有子路由， 进行递归处理
     if(route.children) {
         route.children.forEach(r => {
-            addRouteRecord(r, pathList, pathMap, record)
+            addRouteRecord(r, pathList, pathMap, record);
         })
     }
 }
@@ -33,10 +35,13 @@ function createRouteMap(routes, oldList, oldMap){
 }
 export default function createRouteMacth(routes) {
     // 生成易于程序使用的对应路由结构
-    const {pathList, pathMap} = createRouteMap(routes)
+    const {pathList, pathMap} = createRouteMap(routes);
     // 用于匹配路径是哪个组件
-    function match() {
-        
+    function match(location) {
+        const routes = createRoutes(pathMap[location], {
+            path: location
+        })
+        return routes;
     }
     // 添加的路由要和原来的路由整合到一起
     // 用户添加新路由
@@ -46,5 +51,19 @@ export default function createRouteMacth(routes) {
     return {
         match,
         addRoutes
+    }
+}
+// 通过record路由记录， 匹配出所有需渲染的组件例如 /about/a 如果about和a下是两个路由， 需
+// 匹配出about组件和a组件放入数组[about, a]
+export function createRoutes(record, location){
+    // 存储匹配到的组件
+    const matched = [];
+    while(record){
+        matched.unshift(record.component);
+        record = record.parentRecord;
+    }
+    return {
+        ...location,
+        matched
     }
 }
