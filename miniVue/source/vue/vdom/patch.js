@@ -60,35 +60,35 @@ function updateProptes(vdom, odlProps={}) {
 }
 function patch(oldVdom, vdom){
     // 节点一样
-    const oldEl = oldVdom.el
-    oldEl.parentNode.replaceChild(createEle(vdom), oldEl)
-    // if(oldVdom.tag !== vdom.tag) {     
-    //     const oldEl = oldVdom.el
-    //     oldEl.parentNode.replaceChild(createEle(vdom), oldEl)
-    //     return
-    // }
-    // console.log(typeof vdom.text !== 'undefined', typeof vdom.text, vdom)
-    // if( typeof vdom.text !== 'undefined') {
-    //     return console.log(typeof vdom.text, vdom.text, 111)
-    // }
+    // const oldEl = oldVdom.el
+    // oldEl.parentNode.replaceChild(createEle(vdom), oldEl)
+    if(oldVdom.tag !== vdom.tag) {     
+        const oldEl = oldVdom.el
+        oldEl.parentNode.replaceChild(createEle(vdom), oldEl)
+        return
+    }
+    console.log(typeof vdom.text !== 'undefined', typeof vdom.text, vdom)
+    if( typeof vdom.text !== 'undefined') {
+        return console.log(typeof vdom.text, vdom.text, 111)
+    }
     // 节点一样, 不需要创建元素， 从老的vnode中获取到原有元素， 存储在行vnode中
-    // let docEl = vdom.el = oldVdom.el
-    // // 1 更新当前节点属性
-    // updateProptes(vdom, oldVdom.data)
-    // const newChildren = vdom.children;
-    // const oldChilren = oldVdom.children;
-    // if(newChildren.length > 0 && oldChilren.length > 0) {
-    //     // 新老dom都存在子元素， 最复杂， 需要进行dom对比
-    //     updateChilren(docEl, newChildren, oldChilren)
-    // } else if(newChildren.length > 0) {
-    //     // 新元素有子元素， 老的没有子元素， 只需将新的子元素append到当前元素即可
-    //     for(let i=0; i< newChildren.length;i++) {
-    //         docEl.appendChild(createEle(newChildren[i]))
-    //     } 
-    // } else {
-    //     // 旧元素有子元素， 新元素没子元素， 将dom的子元素清除
-    //     docEl.innerHTML = ''
-    // }
+    let docEl = vdom.el = oldVdom.el
+    // 1 更新当前节点属性
+    updateProptes(vdom, oldVdom.data)
+    const newChildren = vdom.children;
+    const oldChilren = oldVdom.children;
+    if(newChildren.length > 0 && oldChilren.length > 0) {
+        // 新老dom都存在子元素， 最复杂， 需要进行dom对比
+        updateChilren(docEl, newChildren, oldChilren)
+    } else if(newChildren.length > 0) {
+        // 新元素有子元素， 老的没有子元素， 只需将新的子元素append到当前元素即可
+        for(let i=0; i< newChildren.length;i++) {
+            docEl.appendChild(createEle(newChildren[i]))
+        } 
+    } else {
+        // 旧元素有子元素， 新元素没子元素， 将dom的子元素清除
+        docEl.innerHTML = ''
+    }
 
     // 此处是用于调试用的着
     // const oldEl = oldVdom.el
@@ -104,10 +104,9 @@ function updateChilren(parent, newChildren, oldChilren) {
     let newStartChild = newChildren[0];
     let oldEndChild = oldChilren[oldEndIdx]
     let newEndChild = newChildren[newEndIdx]
-
+    let oldKeyToindex = creatKeyToIndexMap(oldChilren);
     // 进行循环对比, 新老虚拟dom有一方的开始序列大于结束序列， 说明有一方已经遍历完了
     while(newStartIdx <= newEndIdx && oldStartIdx <= oldEndIdx) { // 新虚拟dom的开始序列大于结束序列时， 新的dom已经遍历完，结束循环对比
-        let oldKeyToindex = creatKeyToIndexMap(oldChilren);
         if(!oldStartChild){
             // 这里处理在最后一种大乱斗对比时，将后面元素移动但前面时，原有位置设置为了undefined的情况
             oldStartChild = oldChilren[++oldStartIdx];

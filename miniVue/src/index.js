@@ -41,15 +41,15 @@ const vue = new Vue({
             console.log('aa')
         }
     },
-    // render: function(){
-    //     // a b c d
-    //     // return h('div', {a:'11', style:{color: 'red', 'font-size': '20px'}}, 111)
-    //     return h('div', {a:'11', style:{color: 'red', 'font-size': '20px'}}, h('div', {key:'a'}, 'a'),h('div', {key:'b'}, 'b'), h('div', {key:'c'}, 'c'), h('div', {key:'d'}, 'd'))
-    // }
+    render: function(){
+        // a b c d
+        // return h('div', {a:'11', style:{color: 'red', 'font-size': '20px'}}, 111)
+        return h('div', {a:'11', style:{color: 'red', 'font-size': '20px'}}, h('div', {key:'a'}, 'a'),h('div', {key:'b'}, 'b'), h('div', {key:'c'}, 'c'), h('div', {key:'d'}, 'd'))
+    }
 })
 // const vnode = h('span', {a:222, b: 222, style:{color: 'blue'}}, 222)
 // 向后插入元素 a b c d e f
-// const vnode = h('div', {a:222, b: 222, style:{color: 'blue'}}, h('div', {key:'a'}, 'a'),h('div', {key:'b'}, 'b'), h('div', {key:'c'}, 'c'), h('div', {key:'d'}, 'd'), h('div', {key:'e'}, 'e'), h('div', {key:'f'}, 'f'))
+const vnode = h('div', {a:222, b: 222, style:{color: 'blue'}}, h('div', {key:'a'}, 'a'),h('div', {key:'b'}, 'b'), h('div', {key:'c'}, 'c'), h('div', {key:'d'}, 'd'), h('div', {key:'e'}, 'e'), h('div', {key:'f'}, 'f'))
 // 向前插入元素 f e a b c d
 // const vnode = h('div', {a:222, b: 222, style:{color: 'blue'}}, h('div', {key:'f'}, 'f'), h('div', {key:'e'}, 'e'), h('div', {key:'a'}, 'a'),h('div', {key:'b'}, 'b'), h('div', {key:'c'}, 'c'), h('div', {key:'d'}, 'd'))
 // 移动元素 b c d a
@@ -58,9 +58,9 @@ const vue = new Vue({
 // const vnode = h('div', {a:222, b: 222, style:{color: 'blue'}}, h('div', {key:'d'}, 'd'), h('div', {key:'a'}, 'a'),h('div', {key:'b'}, 'b'), h('div', {key:'c'}, 'c'))
 // 移动元素 e d b c f
 // const vnode = h('div', {a:222, b: 222, style:{color: 'blue'}}, h('div', {key:'e'}, 'e'), h('div', {key:'d'}, 'd'),h('div', {key:'b'}, 'bb'), h('div', {key:'c'}, 'c'), h('div', {key:'f'}, 'f'))
-// setTimeout(() => {
-//     vue._patch(vnode)
-// }, 1000)
+setTimeout(() => {
+    vue._patch(vnode)
+}, 1000)
 // const unwatch = vue.$watch('d', function(newvalue, oldVal){
 //     console.log(newvalue, oldVal, '1111')
 // })
