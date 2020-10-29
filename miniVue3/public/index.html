@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="effect"></div>
+</body>
+<script>
+  const effectDom = document.querySelector(".effect");
+  const { reactive, effect } = vue;
+  const state = reactive([1, 2, 3]);
+  effect(function () {
+    effectDom.innerHTML = state[2]
+  })
+  setTimeout(() => {
+    state[10] = 2;
+  }, 1000)
+</script>
+
+</html>
