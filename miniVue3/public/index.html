@@ -8,18 +8,34 @@
 </head>
 
 <body>
-  <div class="effect"></div>
+  <div class="" id="app"></div>
+  <!-- <div class="effect"></div> -->
 </body>
 <script>
-  const effectDom = document.querySelector(".effect");
-  const { reactive, effect } = vue;
-  const state = reactive([1, 2, 3]);
-  effect(function () {
-    effectDom.innerHTML = state[2]
-  })
+  // const effectDom = document.querySelector(".effect");
+  const { reactive, effect, createApp, h } = vue;
+  // const state = reactive([1, 2, 3]);
+
+  // effect(function () {
+  //   effectDom.innerHTML = state[2]
+  // })
+  // setTimeout(() => {
+  //   state[10] = 2;
+  // }, 1000)
+  const state = reactive({ title: "gome" });
+  const app = {
+    setUp() {
+      return () => {
+        return h('div', { class: "item", style: { background: "yellow", color: "red" }, name: "111" },
+          [h("p", {}, "111"), h("span", {}, "mingcheng" + state.title)])
+      }
+    }
+  }
   setTimeout(() => {
-    state[10] = 2;
+    state.title = "jinrong";
+    // console.log(state.title)
   }, 1000)
+  createApp(app).mount("#app");
 </script>
 
 </html>

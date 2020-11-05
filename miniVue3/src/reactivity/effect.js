@@ -92,7 +92,6 @@ export function track (target, key) {
 }
 // 用于触发依赖
 export function trigger (target, type, key, val, oldVal) {
-
   // 获取对象target的依赖数据map
   let depsMap = targetMap.get(target);
   // 没有收集过依赖不许执行
@@ -145,9 +144,10 @@ export function trigger (target, type, key, val, oldVal) {
       // 根据我们传入的type处理余下特殊情况
       switch (type) {
         case "ADD":
-
+          run(deps);
           break;
         case "SET":
+          run(deps);
           break;
       }
     }
