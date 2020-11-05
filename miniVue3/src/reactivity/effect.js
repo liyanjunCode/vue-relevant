@@ -145,26 +145,19 @@ export function trigger (target, type, key, val, oldVal) {
       // 根据我们传入的type处理余下特殊情况
       switch (type) {
         case "ADD":
-<<<<<<< HEAD
-          run(deps);
-          break;
-        case "SET":
-          run(deps);
-=======
           // 如果是数组新增并且是用的下标， 直接获取length的依赖执行
-          if(Array.isArray(target)) {
-            if(isIntegerKey(key)) {
+          if (Array.isArray(target)) {
+            if (isIntegerKey(key)) {
               run(depsMap.get("length"));
             }
-          }else {
+          } else {
             depsMap.forEach((dep, key) => {
               run(dep);
             })
           }
           break;
         case "SET":
-          run(depsMap.get(key));
->>>>>>> 6177c2004c2cb10293967164cb46634f6f1c8323
+          run(deps);
           break;
       }
     }
