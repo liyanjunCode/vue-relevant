@@ -6,7 +6,7 @@ function patchClass (el, val) {
   el.className = val;
 }
 
-function patchStyle (el, newVal, oldVal) {
+function patchStyle (el, oldVal, newVal) {
   for (let key in newVal) {
     el.style[key] = newVal[key];
   }
@@ -23,13 +23,13 @@ function patchAttr (el, key, val) {
     el.setAttribute(key, val);
   }
 }
-export function patchProps (el, key, newVal = null, oldVal = null) {
+export function patchProps (el, key, oldVal = null, newVal = null) {
   switch (key) {
     case "class":
       patchClass(el, newVal)
       break;
     case "style":
-      patchStyle(el, newVal, oldVal);
+      patchStyle(el, oldVal, newVal);
       break;
     default:
       patchAttr(el, key, newVal);

@@ -22,19 +22,57 @@
   // setTimeout(() => {
   //   state[10] = 2;
   // }, 1000)
-  const state = reactive({ title: "gome" });
+  // const state = reactive({ title: "gome" });
+  // const app = {
+  //   setUp() {
+  //     return () => {
+  //       return h('div', { class: "item", style: { background: "yellow", color: "red" }, name: "111" },
+  //         [h("p", {}, "111"), h("span", {}, "mingcheng" + state.title)])
+  //     }
+  //   }
+  // }
+  // setTimeout(() => {
+  //   state.title = "jinrong";
+  //   // console.log(state.title)
+  // }, 1000)
+
+  const state = reactive({ flag: true });
   const app = {
     setUp() {
+      // return () => {
+      //   return state.flag ? h("div", { key: "A", style: { background: "red" } }, "ccc") :
+      //     // h("div", { key: "B", style: { background: "yellow" } }, "B");
+      //     // h("div", { key: "A", style: { background: "yellow", color: "blue" }, class: "icon" }, "ccc");
+      //     // h("div", { key: "A", style: { background: "yellow", color: "blue" }, class: "icon" }, [
+      //     //   h("div", { key: "b", style: { background: "yellow", color: "blue" } }, "111"),
+      //     //   h("div", { key: "c", style: { background: "yellow", color: "blue" } }, "222"),
+      //     // ]);
+      //     h("p", { key: "A", style: { background: "red" } }, "ccc");
+      // }
       return () => {
-        return h('div', { class: "item", style: { background: "yellow", color: "red" }, name: "111" },
-          [h("p", {}, "111"), h("span", {}, "mingcheng" + state.title)])
+        return state.flag ? h("div", { key: "a" }, [
+          h("div", { key: "A", style: { background: "red" } }, "A"),
+          h("div", { key: "B", style: { background: "yellow" } }, "B"),
+          h("div", { key: "C", style: { background: "pink" } }, "C"),
+          h("div", { key: "D", style: { background: "gold" } }, "D"),
+          h("div", { key: "E", style: { background: "gold" } }, "E"),
+          h("div", { key: "G", style: { background: "gold" } }, "G"),
+          h("div", { key: "H", style: { background: "gold" } }, "H"),
+        ]) :
+          h("div", { key: "a" }, [
+
+            h("div", { key: "A", style: { background: "red" } }, "A"),
+            h("div", { key: "B", style: { background: "yellow" } }, "B"),
+            h("div", { key: "D", style: { background: "gold" } }, "D"),
+            h("div", { key: "I", style: { background: "blue" } }, "I"),
+            h("div", { key: "E", style: { background: "gold" } }, "E"),
+            h("div", { key: "G", style: { background: "gold" } }, "G"),
+            h("div", { key: "H", style: { background: "gold" } }, "H"),
+          ])
       }
     }
   }
-  setTimeout(() => {
-    state.title = "jinrong";
-    // console.log(state.title)
-  }, 1000)
+  setTimeout(() => { state.flag = false }, 1000)
   createApp(app).mount("#app");
 </script>
 
