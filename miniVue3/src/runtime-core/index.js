@@ -133,8 +133,11 @@ function baseCreateRenderer (options) {
   // dom diff流程
   const patchKeyChildren = (c1, c2, container) => {
     let i = 0;
+    // l2用来判断参照物ancher， 当nextIndex大于l2时ancher为null
+    const l2 = c2.length;
     let e1 = c1.length - 1;
-    let e2 = c2.length - 1;
+    let e2 = l2 - 1;
+
     /* 
       1.从前往后进行对比 , 循环条件 i始终比e1和e2小
       可能情况 
@@ -178,7 +181,9 @@ function baseCreateRenderer (options) {
     if (i > e1) {
       // 说明有新增, 直接挂载新元素即可
       while (i <= e2) {
-        const ancher = c2[i + 1] ? c2[i + 1].el : null;
+        // 超出e2元素长度ancher改为null
+        let nextPos = e2 + 1;
+        const ancher = nextPos < l2 ? c2[nextPos].el : null;
         patch(null, c2[i], container, ancher);
         i++;
       }
@@ -198,7 +203,7 @@ function baseCreateRenderer (options) {
         const key = c2[i].key;
         keytoNewIndexMap.set(key, i);
       }
-
+      let j;
       // 已经被比较的dom个数
       let patched = 0;
       // 将要被比对的元素个数
@@ -213,44 +218,72 @@ function baseCreateRenderer (options) {
       let newIndex;
       for (i = s1; i <= e1; i++) {
         const prevChild = c1[i];
-
+        // 这里需要处理旧元素剩的多余节点，patched大于等于toBePatched元素时， 说明旧子节点已经有剩余不需要的了
+        //不需要就卸载掉
+        if (patched >= toBePatched) {
+          hostRemove(prevChild.el);
+        }
         if (prevChild.key != null) {
           // 旧的节点有key值， 直接去建立的映射表里找元素现在新的序列位置
           newIndex = keytoNewIndexMap.get(prevChild.key);
         } else {
           // 如果旧节点没有key值，看newIndexToOldIndex对应位置的值是否为0，为0
           // 就是未找到对象元素， 然后再判断tag是否相等
-          for (let j = s2; j < toBePatched; j++) {
+          for (j = s2; j < toBePatched; j++) {
             if (newIndexToOldIndex[j] == 0 && isSameVnode(prevChild, c2[j + s2])) {
-              newIndex = j + s2;
+              newIndex = j;
               break;
             }
           }
         }
-        if (!newIndex) {
+        if (newIndex == undefined) {
           // 在新元素中找不到对应的index，说明元素已经不存在了， 要卸载
           hostRemove(prevChild.el)
         } else {
+          // 0是一个特殊标识，所以需要i+1
+          newIndexToOldIndex[newIndex - s2] = i + 1;
+
           // 找到就把当前序列存起来
-          maxNewIndexSoFar = newIndex;
-        }
-        if (maxNewIndexSoFar > newIndex) {
-          // 如果当maxNewIndexSoFar大于newIndex就说明有元素移位了
-          // 因为maxNewIndexSoFar一直是存储找到旧节点在新节点中的newIndex，
-          // 旧节点一直是递增的， 如果未移动位置， 新节点也应该是递增的
-          moved = true;
-        }
+          if (maxNewIndexSoFar >= newIndex) {
+            // 如果当maxNewIndexSoFar大于newIndex就说明有元素移位了
+            // 因为maxNewIndexSoFar一直是存储找到旧节点在新节点中的newIndex，
+            // 旧节点一直是递增的， 如果未移动位置， 新节点也应该是递增的
+            moved = true;
+          } else {
+            maxNewIndexSoFar = newIndex;
+          }
 
-        // 下面就要用最长递增子序列来判断最少的元素位移
-        const child = c2[i];
-        const key = child.key;
-        // let newIndex = keytoNewIndexMap.get(key);
-        // if (newIndex === undefined) {
-        //   // 如果不存在key说ing是新增元素
-        // } else {
-
-        // }
+          // newIndex有值说明当前元素需要更新操作，如果需要移动位置，最后再做处理
+          patch(prevChild, c2[newIndex], container);
+          // 记录对比过的元素
+          patched++
+        }
       }
+      // 下面就要用最长递增子序列来判断最少的元素位移
+      const increasingNewIndexSequence = moved ? getSequence(newIndexToOldIndex) : [];
+      j = increasingNewIndexSequence.length;
+      // 倒叙循环要对比的元素
+      // 获取到最后一个对比元素之后那个元素序列作为dom操作的参照物
+
+      for (i = toBePatched - 1; i >= 0; i--) {
+        // 等于0是新增元素，只要找到参照物插入即可
+        const nextIndex = s2 + i;
+        const nextChild = c2[nextIndex];
+        const ancher = nextIndex + 1 < l2 ? c2[nextIndex + 1].el : null;
+        if (newIndexToOldIndex[i] == 0) {
+          patch(null, c2[s2 + i], container, ancher)
+        } else if (moved) {
+          // 如果不是新增， 不用移动， 直接结束了
+          if (j < 0 || i !== increasingNewIndexSequence[j]) {
+            //j为最长递增子序列的数组长度， 当j<0时，当前i肯定需要移动 有需要的移动元素， i不在最长递增子序列中需要移动
+            hostInsert(nextChild.el, container, ancher)
+          } else {
+            // 其他情况不需要移动节点， 只需将j--即可j--指向最长递增子序列前一项
+            j--;
+          }
+        }
+      }
+
     }
   }
   // 对比元素属性
@@ -307,6 +340,49 @@ function baseCreateRenderer (options) {
   return {
     createApp: createAppApi(render)
   }
+}
+function getSequence (arr) {
+  const p = arr.slice()
+  const result = [0]
+  let i, j, u, v, c
+  const len = arr.length
+  for (i = 0; i < len; i++) {
+    const arrI = arr[i]
+    if (arrI !== 0) {
+      j = result[result.length - 1]
+      if (arr[j] < arrI) {
+        // 存储在 result 更新前的最后一个索引的值
+        p[i] = j
+        result.push(i)
+        continue
+      }
+      u = 0
+      v = result.length - 1
+      // 二分搜索，查找比 arrI 小的节点，更新 result 的值
+      while (u < v) {
+        c = ((u + v) / 2) | 0
+        if (arr[result[c]] < arrI) {
+          u = c + 1
+        } else {
+          v = c
+        }
+      }
+      if (arrI < arr[result[u]]) {
+        if (u > 0) {
+          p[i] = result[u - 1]
+        }
+        result[u] = i
+      }
+    }
+  }
+  u = result.length
+  v = result[u - 1]
+  // 回溯数组 p，找到最终的索引
+  while (u-- > 0) {
+    result[u] = v
+    v = p[v]
+  }
+  return result
 }
 
 

@@ -49,29 +49,68 @@
       //     // ]);
       //     h("p", { key: "A", style: { background: "red" } }, "ccc");
       // }
+      // return () => {
+      //   return state.flag ? h("div", { key: "a" }, [
+      //     h("div", { key: "A", style: { background: "gold" } }, "A"),
+      //     h("div", { key: "B", style: { background: "gold" } }, "B"),
+
+      //     h("div", { key: "C", style: { background: "gold" } }, "C"),
+      //     h("div", { key: "D", style: { background: "gold" } }, "D"),
+
+      //     h("div", { key: "E", style: { background: "gold" } }, "E"),
+      //     h("div", { key: "G", style: { background: "gold" } }, "G"),
+      //     h("div", { key: "H", style: { background: "gold" } }, "H"),
+      //   ]) :
+      //     h("div", { key: "a" }, [
+      //       h("div", { key: "G", style: { background: "gold" } }, "G"),
+      //       h("div", { key: "A", style: { background: "gold" } }, "A"),
+      //       h("div", { key: "E", style: { background: "gold" } }, "E"),
+      //       h("div", { key: "B", style: { background: "gold" } }, "B"),
+
+
+      //       // h("div", { key: "I", style: { background: "gold" } }, "I"),
+      //       h("div", { key: "C", style: { background: "gold" } }, "C"),
+      //       h("div", { key: "D", style: { background: "gold" } }, "D"),
+
+
+
+
+
+
+      //       h("div", { key: "H", style: { background: "gold" } }, "H"),
+      //     ])
+      // }
       return () => {
         return state.flag ? h("div", { key: "a" }, [
-          h("div", { key: "A", style: { background: "red" } }, "A"),
-          h("div", { key: "B", style: { background: "yellow" } }, "B"),
-          h("div", { key: "C", style: { background: "pink" } }, "C"),
+          h("div", { key: "A", style: { background: "gold" } }, "A"),
+          h("div", { key: "B", style: { background: "gold" } }, "B"),
+
+          h("div", { key: "C", style: { background: "gold" } }, "C"),
           h("div", { key: "D", style: { background: "gold" } }, "D"),
           h("div", { key: "E", style: { background: "gold" } }, "E"),
+
+          h("div", { key: "F", style: { background: "gold" } }, "F"),
           h("div", { key: "G", style: { background: "gold" } }, "G"),
-          h("div", { key: "H", style: { background: "gold" } }, "H"),
+
         ]) :
           h("div", { key: "a" }, [
 
-            h("div", { key: "A", style: { background: "red" } }, "A"),
-            h("div", { key: "B", style: { background: "yellow" } }, "B"),
+            h("div", { key: "A", style: { background: "gold" } }, "A"),
+            h("div", { key: "B", style: { background: "gold" } }, "B"),
+
             h("div", { key: "D", style: { background: "gold" } }, "D"),
-            h("div", { key: "I", style: { background: "blue" } }, "I"),
             h("div", { key: "E", style: { background: "gold" } }, "E"),
-            h("div", { key: "G", style: { background: "gold" } }, "G"),
+            h("div", { key: "C", style: { background: "gold" } }, "C"),
             h("div", { key: "H", style: { background: "gold" } }, "H"),
+
+            h("div", { key: "F", style: { background: "gold" } }, "F"),
+            h("div", { key: "G", style: { background: "gold" } }, "G"),
           ])
       }
     }
   }
+  // abcdefg
+  // abdechfg
   setTimeout(() => { state.flag = false }, 1000)
   createApp(app).mount("#app");
 </script>
