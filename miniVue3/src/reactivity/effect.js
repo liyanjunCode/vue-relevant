@@ -136,7 +136,9 @@ export function trigger (target, type, key, val, oldVal) {
         // 因为在用 state.length = 2修改值时 只有当设置的length的
         // 值（val）小于 数组依赖项的下标时，才更新界面
         // 或本身就有length收集的依赖时
-        if (key === "length" || key <= val) {
+
+        if (key === "length" || key >= val) {
+          console.log(key)
           // 触发更新
           run(dep);
         }
