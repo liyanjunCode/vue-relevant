@@ -15,19 +15,27 @@
   const { reactive, effect, createApp, h } = vue;
   const effectDom = document.querySelector(".effect");
 
-  // const state = reactive([1, 2, 3]);
-  const state = reactive({ a: 1, b: 2, c: 3 });
+  const state = reactive([1, 2, 3]);
+  // const state = reactive({ a: 1, b: 2, c: 3 });
   effect(function () {
-    let str = "";
-    for (let key in state) {
-      str += `<p>${state[key]}</p>`
-    }
-    effectDom.innerHTML = str
+    // let str = "";
+    // for (let key in state) {
+    //   str += `<p>${state[key]}</p>`
+    // }
+    // console.log(str)
+    effectDom.innerHTML = state
   })
   setTimeout(() => {
-    state["c"] = 4;
+    state[4] = 4;
   }, 1000)
 
+  const state = reactive([1, 2, 3]);
+  effect(function () {
+    effectDom.innerHTML = state
+  })
+  setTimeout(() => {
+    state[4] = 4;
+  }, 1000)
   // const state = reactive({ title: "gome" });
   // const app = {
   //   setUp() {

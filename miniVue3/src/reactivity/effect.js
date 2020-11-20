@@ -48,6 +48,7 @@ function createReactiveEffect (fn, options = {}) {
       }
     }
   }
+  effect.active = true;
   // 唯一标记
   effect.uid = uid++;
   // 用于存储被哪个值依赖
