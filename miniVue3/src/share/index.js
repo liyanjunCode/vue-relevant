@@ -7,6 +7,7 @@ export const isObject = (val) => { return typeof val === "object" };
 export const isString = getType("String");
 export const isIntegerKey = (key) => { return isString(key) && ("" + parseInt(key, 10) === key) };
 // 判断数据是否有当前属性
+const hasOwnProperty = Object.prototype.hasOwnProperty;
 export const hasOwn = (target, key) => { return hasOwnProperty.call(target, key) }
 export const shapFlags = {
   ELEMENT: 1,

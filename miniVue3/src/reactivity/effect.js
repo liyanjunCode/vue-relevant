@@ -91,6 +91,8 @@ export function track (target, key) {
     activeEffect.deps.push(deps);
   }
 }
+const setSym = Symbol("iterate");
+const mapSym = Symbol("Map key iterate");
 // 用于触发依赖
 export function trigger (target, type, key, val, oldVal) {
   // 获取对象target的依赖数据map
@@ -99,14 +101,15 @@ export function trigger (target, type, key, val, oldVal) {
   if (!depsMap) { return }
   // 获取effect数组
   let deps = depsMap.get(key);
-  const run = (effects) => {
-    if (effects) {
-      effects.forEach(effect => {
-        // 执行副作用函数
-        effect();
-      });
+  let effects = new Set();
+  const add = (effectsSet) => {
+    if (effectsSet) {
+      effectsSet.forEach(effect => {
+        effects.add(effect);
+      })
     }
   }
+
   if (key != void 0) {
     //处理特殊情况对数组
     /* 情况1：
@@ -138,9 +141,8 @@ export function trigger (target, type, key, val, oldVal) {
         // 或本身就有length收集的依赖时
 
         if (key === "length" || key >= val) {
-          console.log(key)
           // 触发更新
-          run(dep);
+          add(dep);
         }
       })
     } else {
@@ -150,20 +152,28 @@ export function trigger (target, type, key, val, oldVal) {
           // 如果是数组新增并且是用的下标， 直接获取length的依赖执行
           if (Array.isArray(target)) {
             if (isIntegerKey(key)) {
-              run(depsMap.get("length"));
+              add(depsMap.get("length"));
             }
           } else {
             depsMap.forEach((dep, key) => {
-              run(dep);
+              add(dep);
             })
           }
           break;
         case "SET":
-          run(deps);
+          add(deps);
           break;
       }
     }
 
   }
 
+  const run = (effect) => {
+    if (effect.options.scheduler) {
+      effect.options.scheduler(effect);
+    } else {
+      effect();
+    }
+  }
+  effects.forEach(run)
 }
