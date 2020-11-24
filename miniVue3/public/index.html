@@ -12,8 +12,8 @@
   <!-- <div class="effect"></div> -->
 </body>
 <script>
-  const { reactive, effect, createApp, h } = vue;
-  const effectDom = document.querySelector(".effect");
+  const { reactive, effect, createApp, h, computed } = vue;
+  // const effectDom = document.querySelector(".effect");
 
   // const state = reactive([1, 2, 3]);
   // // const state = reactive({ a: 1, b: 2, c: 3 });
@@ -50,10 +50,18 @@
   //   // console.log(state.title)
   // }, 1000)
 
-  const state = reactive({ flag: true });
+  // const state = reactive({ flag: true });
   // const state = reactive([1, 2, 3]);
+  const state = reactive({ num: 1 });
+  let num = computed(() => {
+    console.log(2222)
+    return state.num + 1;
+  })
   const app = {
     setUp() {
+      return () => {
+        return h("div", { key: "A", style: { background: "red" } }, num.value)
+      }
       // return () => {
       //   return state.flag ? h("div", { key: "A", style: { background: "red" } }, "ccc") :
       //     // h("div", { key: "B", style: { background: "yellow" } }, "B");
@@ -81,47 +89,41 @@
       //       h("div", { key: "A", style: { background: "gold" } }, "A"),
       //       h("div", { key: "E", style: { background: "gold" } }, "E"),
       //       h("div", { key: "B", style: { background: "gold" } }, "B"),
-
-
       //       // h("div", { key: "I", style: { background: "gold" } }, "I"),
       //       h("div", { key: "C", style: { background: "gold" } }, "C"),
       //       h("div", { key: "D", style: { background: "gold" } }, "D"),
-
-
-
-
-
-
       //       h("div", { key: "H", style: { background: "gold" } }, "H"),
       //     ])
       // }
-      return () => {
-        return state.flag ? h("div", { key: "a" }, [
-          h("div", { key: "A", style: { background: "gold" } }, "A"),
-          h("div", { key: "B", style: { background: "gold" } }, "B"),
 
-          h("div", { key: "C", style: { background: "gold" } }, "C"),
-          h("div", { key: "D", style: { background: "gold" } }, "D"),
-          h("div", { key: "E", style: { background: "gold" } }, "E"),
+      // dom对比 [abcdefg] [abdechfg]
+      // return () => {
+      //   return state.flag ? h("div", { key: "a" }, [
+      //     h("div", { key: "A", style: { background: "gold" } }, "A"),
+      //     h("div", { key: "B", style: { background: "gold" } }, "B"),
 
-          h("div", { key: "F", style: { background: "gold" } }, "F"),
-          h("div", { key: "G", style: { background: "gold" } }, "G"),
+      //     h("div", { key: "C", style: { background: "gold" } }, "C"),
+      //     h("div", { key: "D", style: { background: "gold" } }, "D"),
+      //     h("div", { key: "E", style: { background: "gold" } }, "E"),
 
-        ]) :
-          h("div", { key: "a" }, [
+      //     h("div", { key: "F", style: { background: "gold" } }, "F"),
+      //     h("div", { key: "G", style: { background: "gold" } }, "G"),
 
-            h("div", { key: "A", style: { background: "gold" } }, "A"),
-            h("div", { key: "B", style: { background: "gold" } }, "B"),
+      //   ]) :
+      //     h("div", { key: "a" }, [
 
-            h("div", { key: "D", style: { background: "gold" } }, "D"),
-            h("div", { key: "E", style: { background: "gold" } }, "E"),
-            h("div", { key: "C", style: { background: "gold" } }, "C"),
-            h("div", { key: "H", style: { background: "gold" } }, "H"),
+      //       h("div", { key: "A", style: { background: "gold" } }, "A"),
+      //       h("div", { key: "B", style: { background: "gold" } }, "B"),
 
-            h("div", { key: "F", style: { background: "gold" } }, "F"),
-            h("div", { key: "G", style: { background: "gold" } }, "G"),
-          ])
-      }
+      //       h("div", { key: "D", style: { background: "gold" } }, "D"),
+      //       h("div", { key: "E", style: { background: "gold" } }, "E"),
+      //       h("div", { key: "C", style: { background: "gold" } }, "C"),
+      //       h("div", { key: "H", style: { background: "gold" } }, "H"),
+
+      //       h("div", { key: "F", style: { background: "gold" } }, "F"),
+      //       h("div", { key: "G", style: { background: "gold" } }, "G"),
+      //     ])
+      // }
 
     }
   }
@@ -131,7 +133,9 @@
   // }
   // abcdefg
   // abdechfg
-  setTimeout(() => { state.flag = false }, 1000);
+  setTimeout(() => {
+    state.num++;
+  }, 1000);
   createApp(app).mount("#app");
 </script>
 

@@ -5,6 +5,7 @@ const getType = createCurry(isType);
 // export const isObject = getType("Object");
 export const isObject = (val) => { return typeof val === "object" };
 export const isString = getType("String");
+export const isFunction = getType("Function");
 export const isIntegerKey = (key) => { return isString(key) && ("" + parseInt(key, 10) === key) };
 // 判断数据是否有当前属性
 const hasOwnProperty = Object.prototype.hasOwnProperty;

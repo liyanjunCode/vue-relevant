@@ -1,13 +1,14 @@
 import { isIntegerKey } from "../share/index"
 // 副作用函数， 相当于vue2中的watcher
-export function effect (fn) {
+export function effect (fn, options = {}) {
   // 因为副作用函数执行时， 我们需要将当前执行的副作用函数储存，获取值时使用
   // 并且需要增加一些属性， 所以用高阶函数创建effect
-  let effect = createReactiveEffect(fn);
+  let effect = createReactiveEffect(fn, options);
   if (!effect.options.lazy) {
     // 如果不是懒函数（即computed）， 用于第一次收集依赖
     effect();
   }
+  return effect;
 }
 // 用于给每个副作用函数增加标记， 标记唯一
 let uid = 0;
@@ -25,7 +26,7 @@ let activeEffect;
 // })
 let effectStack = [];
 // 真正创建副作用函数， 并做一些属性定义
-function createReactiveEffect (fn, options = {}) {
+function createReactiveEffect (fn, options) {
   const effect = function () {
     // 副作用函数执行完需要将activeEffect，重置为空， 防止不在effect函数中的取值收集依赖
     // !effectStack.includes(effect)判断用于处理死循序如下写法
@@ -40,7 +41,7 @@ function createReactiveEffect (fn, options = {}) {
         // 先将effect存入栈中解决effect嵌套问题
         effectStack.push(effect);
         activeEffect = effect;
-        fn()
+        return fn()
       } finally {
         // 执行完后将activeEffect设置成栈中前一个effect
         effectStack.pop();
@@ -71,6 +72,10 @@ function createReactiveEffect (fn, options = {}) {
 const targetMap = new WeakMap();
 // 用于收集依赖
 export function track (target, key) {
+  // 如果当前没有执行的副作用函数，不需要收集，直接终止执行
+  if (activeEffect === undefined) {
+    return;
+  }
   // 获取对象存储的deps对象
   let depsMap = targetMap.get(target);
   // 如果deps对象不存在说明是第一次此对象收集依赖需新建对应的数据结构
