@@ -1,7 +1,7 @@
 import { baseHandler } from "./baseHandler"
 import { isObject } from "../share/index"
 
-// reactive函数
+// 响应式reactive函数
 export function reactive (target) {
   return createReactiveObject(target, baseHandler)
 }
