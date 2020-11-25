@@ -1,4 +1,5 @@
 import { isIntegerKey } from "../share/index"
+import { TriggerOpTypes } from "./oprations"
 // 副作用函数， 相当于vue2中的watcher
 export function effect (fn, options = {}) {
   // 因为副作用函数执行时， 我们需要将当前执行的副作用函数储存，获取值时使用
@@ -154,7 +155,7 @@ export function trigger (target, type, key, val, oldVal) {
     } else {
       // 根据我们传入的type处理余下特殊情况
       switch (type) {
-        case "ADD":
+        case TriggerOpTypes.ADD:
           // 如果是数组新增并且是用的下标， 直接获取length的依赖执行
           if (Array.isArray(target)) {
             if (isIntegerKey(key)) {
@@ -166,7 +167,7 @@ export function trigger (target, type, key, val, oldVal) {
             })
           }
           break;
-        case "SET":
+        case TriggerOpTypes.SET:
           add(deps);
           break;
       }

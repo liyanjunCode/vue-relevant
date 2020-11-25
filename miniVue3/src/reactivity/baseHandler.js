@@ -1,4 +1,5 @@
 import { track, trigger } from "./effect"
+import { TriggerOpTypes } from "./oprations"
 import { isIntegerKey, hasOwn } from "../share/index"
 export const baseHandler = {
   get (target, key, recevier) {
@@ -20,10 +21,10 @@ export const baseHandler = {
     const res = Reflect.set(target, key, val);
     if (!hadKey) {
       // 新增属性 通知依赖更新
-      trigger(target, "ADD", key, val, oldVal);
+      trigger(target, TriggerOpTypes.ADD, key, val, oldVal);
     } else {
       // 修改属性 通知依赖更新
-      trigger(target, "SET", key, val, oldVal);
+      trigger(target, TriggerOpTypes.SET, key, val, oldVal);
     }
     return res;
   }

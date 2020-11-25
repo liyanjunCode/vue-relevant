@@ -1,4 +1,5 @@
 import { effect, track, trigger } from "./effect"
+import { TriggerOpTypes } from "./oprations"
 import { isFunction } from "../share"
 class Computed {
   constructor(getter, setter, isReadOnly) {
@@ -9,7 +10,7 @@ class Computed {
     // 只读不可设置值
     // this.isReadOnly = isReadOnly;
     //用于标识计算属性是否需要重新计算
-    this.dirty = false;
+    this.dirty = true;
     // 计算属性的值
     this._value = "";
     // 创建计算属性副作用函数
@@ -20,7 +21,7 @@ class Computed {
         if (!this.dirty) {
           this.dirty = true;
           // 计算属性需要收集依赖, 当值改变时，通知使用计算属性的界面更新
-          trigger(this, "set", "value");
+          trigger(this, TriggerOpTypes.SET, "value");
         }
       }
     })
