@@ -1,6 +1,7 @@
 
 import { createComponentIstance, setUpComponent } from "./components"
 import { effect } from "../reactivity/effect"
+import { queueJob } from "./scheduler"
 // runtime-core元素与各平台操作无关
 import { shapFlags } from "../share/index";
 
@@ -322,7 +323,7 @@ function baseCreateRenderer (options) {
     setUpComponentEffect(instance, container);
   }
   const setUpComponentEffect = (instance, container) => {
-    effect(function componentEffect () {
+    instance.update = effect(function componentEffect () {
       if (!instance.isMounted) {
         // 如果组件没有挂载, subTree 用于下次组件更新比对
         const subTree = instance.subTree = instance.render();
@@ -335,7 +336,7 @@ function baseCreateRenderer (options) {
         instance.subTree = next;
         patch(prev, next, container)
       }
-    })
+    }, { scheduler: queueJob }) // 更新时用queueJob将界面渲染添加为异步任务
   }
   return {
     createApp: createAppApi(render)
