@@ -135,10 +135,13 @@ function baseCreateRenderer (options) {
     }
     // dom diff流程
     const patchKeyChildren = (c1, c2, container) => {
+        //记录从0位置开始已经对比过相同元素的个数
         let i = 0;
         // l2用来判断参照物ancher， 当nextIndex大于l2时ancher为null
         const l2 = c2.length;
+        // 旧的子节点个数
         let e1 = c1.length - 1;
+        // 新的子节点个数
         let e2 = l2 - 1;
 
         /* 
@@ -182,17 +185,19 @@ function baseCreateRenderer (options) {
         }
         // 
         if (i > e1) {
-            // 说明有新增, 直接挂载新元素即可
+            // 老的虚拟dom遍历完成，新的虚拟dom有剩余元素，说明有新增, 循环剩余元素数量，直接挂载新元素即可
             while (i <= e2) {
-                // 超出e2元素长度ancher改为null
+                // 获取当前需要插入元素的下一个元素dom，用insertBefore插入，
+                // 超出e2元素长度ancher改为null insertBefore效果相当于appendchild
                 let nextPos = e2 + 1;
                 const ancher = nextPos < l2 ? c2[nextPos].el : null;
                 patch(null, c2[i], container, ancher);
                 i++;
             }
         } else if (i > e2) {
-            // 需要删除旧节点
+            // 新的虚拟dom遍历完成，老的虚拟dom有剩余元素，剩余的元素都不需要，需要删除旧节点
             while (i <= e1) {
+                // hostRemove就是调用removeChild进行节点删除
                 hostRemove(c1[i].el);
                 i++;
             }
@@ -219,6 +224,7 @@ function baseCreateRenderer (options) {
             // 是否为0判断, 如果为0 说明还未找到, 再通过判断tag是否相等,找一个标签相等的
             // 判定为同一项
             let newIndex;
+            // 处理老的虚拟dom，更新和删除元素操作，并找出需要移动的元素
             for (i = s1; i <= e1; i++) {
                 const prevChild = c1[i];
                 // 这里需要处理旧元素剩的多余节点，patched大于等于toBePatched元素时， 说明旧子节点已经有剩余不需要的了
