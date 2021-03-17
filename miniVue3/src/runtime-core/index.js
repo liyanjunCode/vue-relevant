@@ -230,6 +230,7 @@ function baseCreateRenderer (options) {
                 // 这里需要处理旧元素剩的多余节点，patched大于等于toBePatched元素时， 说明旧子节点已经有剩余不需要的了
                 //不需要就卸载掉
                 if (patched >= toBePatched) {
+                    // 直接删除元素
                     hostRemove(prevChild.el);
                 }
                 if (prevChild.key != null) {
@@ -249,7 +250,8 @@ function baseCreateRenderer (options) {
                     // 在新元素中找不到对应的index，说明元素已经不存在了， 要卸载
                     hostRemove(prevChild.el)
                 } else {
-                    // 0是一个特殊标识，所以需要i+1
+                    // newIndexToOldIndex 记录新节点和老节点对应的位置，为
+                    //最长递增子序列做判断的依据，0是一个特殊标识，所以需要i+1
                     newIndexToOldIndex[newIndex - s2] = i + 1;
 
                     // 找到就把当前序列存起来
