@@ -2,142 +2,146 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
 
 <body>
-  <div class="" id="app"></div>
-  <!-- <div class="effect"></div> -->
+    <div class="" id="app"></div>
+    <!-- <div class="effect"></div> -->
 </body>
 <script>
-  const { reactive, effect, createApp, h, computed } = vue;
-  // const effectDom = document.querySelector(".effect");
+    const { reactive, effect, createApp, h, computed } = vue;
+    // const effectDom = document.querySelector(".effect");
 
-  // const state = reactive([1, 2, 3]);
-  // // const state = reactive({ a: 1, b: 2, c: 3 });
-  // effect(function () {
-  //   // let str = "";
-  //   // for (let key in state) {
-  //   //   str += `<p>${state[key]}</p>`
-  //   // }
-  //   // console.log(str)
-  //   effectDom.innerHTML = state
-  // })
-  // setTimeout(() => {
-  //   state[4] = 4;
-  // }, 1000)
+    // const state = reactive([1, 2, 3]);
+    // // const state = reactive({ a: 1, b: 2, c: 3 });
+    // effect(function () {
+    //   // let str = "";
+    //   // for (let key in state) {
+    //   //   str += `<p>${state[key]}</p>`
+    //   // }
+    //   // console.log(str)
+    //   effectDom.innerHTML = state
+    // })
+    // setTimeout(() => {
+    //   state[4] = 4;
+    // }, 1000)
 
-  // const state = reactive([1, 2, 3]);
-  // effect(function () {
-  //   effectDom.innerHTML = state
-  // })
-  // setTimeout(() => {
-  //   state[4] = 4;
-  // }, 1000)
-  // const state = reactive({ title: "gome" });
-  // const app = {
-  //   setUp() {
-  //     return () => {
-  //       return h('div', { class: "item", style: { background: "yellow", color: "red" }, name: "111" },
-  //         [h("p", {}, "111"), h("span", {}, "mingcheng" + state.title)])
-  //     }
-  //   }
-  // }
-  // setTimeout(() => {
-  //   state.title = "jinrong";
-  //   // console.log(state.title)
-  // }, 1000)
+    // const state = reactive([1, 2, 3]);
+    // effect(function () {
+    //   effectDom.innerHTML = state
+    // })
+    // setTimeout(() => {
+    //   state[4] = 4;
+    // }, 1000)
+    // const state = reactive({ title: "gome" });
+    // const app = {
+    //   setUp() {
+    //     return () => {
+    //       return h('div', { class: "item", style: { background: "yellow", color: "red" }, name: "111" },
+    //         [h("p", {}, "111"), h("span", {}, "mingcheng" + state.title)])
+    //     }
+    //   }
+    // }
+    // setTimeout(() => {
+    //   state.title = "jinrong";
+    //   // console.log(state.title)
+    // }, 1000)
 
-  // const state = reactive({ flag: true });
-  // const state = reactive([1, 2, 3]);
-  const state = reactive({ num: 1 });
-  let num = computed(() => {
-    console.log(2222)
-    return state.num + 1;
-  })
-  console.log(num, 999)
-  const app = {
-    setUp() {
-      return () => {
-        return h("div", { key: "A", style: { background: "red" } }, num.value)
-      }
-      // return () => {
-      //   return state.flag ? h("div", { key: "A", style: { background: "red" } }, "ccc") :
-      //     // h("div", { key: "B", style: { background: "yellow" } }, "B");
-      //     // h("div", { key: "A", style: { background: "yellow", color: "blue" }, class: "icon" }, "ccc");
-      //     // h("div", { key: "A", style: { background: "yellow", color: "blue" }, class: "icon" }, [
-      //     //   h("div", { key: "b", style: { background: "yellow", color: "blue" } }, "111"),
-      //     //   h("div", { key: "c", style: { background: "yellow", color: "blue" } }, "222"),
-      //     // ]);
-      //     h("p", { key: "A", style: { background: "red" } }, "ccc");
-      // }
-      // return () => {
-      //   return state.flag ? h("div", { key: "a" }, [
-      //     h("div", { key: "A", style: { background: "gold" } }, "A"),
-      //     h("div", { key: "B", style: { background: "gold" } }, "B"),
+    // const state = reactive({ flag: true });
+    // const state = reactive([1, 2, 3]);
+    const state = reactive({ num: 1 });
+    let num = computed(() => {
+        return state.num + 1;
+    })
 
-      //     h("div", { key: "C", style: { background: "gold" } }, "C"),
-      //     h("div", { key: "D", style: { background: "gold" } }, "D"),
+    const app = {
+        setUp() {
+            return () => {
+                return h("div", { key: "A", style: { background: "red" } }, num.value)
+            }
+            // return () => {
+            //   return state.flag ? h("div", { key: "A", style: { background: "red" } }, "ccc") :
+            //     // h("div", { key: "B", style: { background: "yellow" } }, "B");
+            //     // h("div", { key: "A", style: { background: "yellow", color: "blue" }, class: "icon" }, "ccc");
+            //     // h("div", { key: "A", style: { background: "yellow", color: "blue" }, class: "icon" }, [
+            //     //   h("div", { key: "b", style: { background: "yellow", color: "blue" } }, "111"),
+            //     //   h("div", { key: "c", style: { background: "yellow", color: "blue" } }, "222"),
+            //     // ]);
+            //     h("p", { key: "A", style: { background: "red" } }, "ccc");
+            // }
+            // return () => {
+            //   return state.flag ? h("div", { key: "a" }, [
+            //     h("div", { key: "A", style: { background: "gold" } }, "A"),
+            //     h("div", { key: "B", style: { background: "gold" } }, "B"),
 
-      //     h("div", { key: "E", style: { background: "gold" } }, "E"),
-      //     h("div", { key: "G", style: { background: "gold" } }, "G"),
-      //     h("div", { key: "H", style: { background: "gold" } }, "H"),
-      //   ]) :
-      //     h("div", { key: "a" }, [
-      //       h("div", { key: "G", style: { background: "gold" } }, "G"),
-      //       h("div", { key: "A", style: { background: "gold" } }, "A"),
-      //       h("div", { key: "E", style: { background: "gold" } }, "E"),
-      //       h("div", { key: "B", style: { background: "gold" } }, "B"),
-      //       // h("div", { key: "I", style: { background: "gold" } }, "I"),
-      //       h("div", { key: "C", style: { background: "gold" } }, "C"),
-      //       h("div", { key: "D", style: { background: "gold" } }, "D"),
-      //       h("div", { key: "H", style: { background: "gold" } }, "H"),
-      //     ])
-      // }
+            //     h("div", { key: "C", style: { background: "gold" } }, "C"),
+            //     h("div", { key: "D", style: { background: "gold" } }, "D"),
 
-      // dom对比 [abcdefg] [abdechfg]
-      // return () => {
-      //   return state.flag ? h("div", { key: "a" }, [
-      //     h("div", { key: "A", style: { background: "gold" } }, "A"),
-      //     h("div", { key: "B", style: { background: "gold" } }, "B"),
+            //     h("div", { key: "E", style: { background: "gold" } }, "E"),
+            //     h("div", { key: "G", style: { background: "gold" } }, "G"),
+            //     h("div", { key: "H", style: { background: "gold" } }, "H"),
+            //   ]) :
+            //     h("div", { key: "a" }, [
+            //       h("div", { key: "G", style: { background: "gold" } }, "G"),
+            //       h("div", { key: "A", style: { background: "gold" } }, "A"),
+            //       h("div", { key: "E", style: { background: "gold" } }, "E"),
+            //       h("div", { key: "B", style: { background: "gold" } }, "B"),
+            //       // h("div", { key: "I", style: { background: "gold" } }, "I"),
+            //       h("div", { key: "C", style: { background: "gold" } }, "C"),
+            //       h("div", { key: "D", style: { background: "gold" } }, "D"),
+            //       h("div", { key: "H", style: { background: "gold" } }, "H"),
+            //     ])
+            // }
 
-      //     h("div", { key: "C", style: { background: "gold" } }, "C"),
-      //     h("div", { key: "D", style: { background: "gold" } }, "D"),
-      //     h("div", { key: "E", style: { background: "gold" } }, "E"),
+            // dom对比 [abcdefg] [abdechfg]
+            // return () => {
+            //   return state.flag ? h("div", { key: "a" }, [
+            //     h("div", { key: "A", style: { background: "gold" } }, "A"),
+            //     h("div", { key: "B", style: { background: "gold" } }, "B"),
 
-      //     h("div", { key: "F", style: { background: "gold" } }, "F"),
-      //     h("div", { key: "G", style: { background: "gold" } }, "G"),
+            //     h("div", { key: "C", style: { background: "gold" } }, "C"),
+            //     h("div", { key: "D", style: { background: "gold" } }, "D"),
+            //     h("div", { key: "E", style: { background: "gold" } }, "E"),
 
-      //   ]) :
-      //     h("div", { key: "a" }, [
+            //     h("div", { key: "F", style: { background: "gold" } }, "F"),
+            //     h("div", { key: "G", style: { background: "gold" } }, "G"),
 
-      //       h("div", { key: "A", style: { background: "gold" } }, "A"),
-      //       h("div", { key: "B", style: { background: "gold" } }, "B"),
+            //   ]) :
+            //     h("div", { key: "a" }, [
 
-      //       h("div", { key: "D", style: { background: "gold" } }, "D"),
-      //       h("div", { key: "E", style: { background: "gold" } }, "E"),
-      //       h("div", { key: "C", style: { background: "gold" } }, "C"),
-      //       h("div", { key: "H", style: { background: "gold" } }, "H"),
+            //       h("div", { key: "A", style: { background: "gold" } }, "A"),
+            //       h("div", { key: "B", style: { background: "gold" } }, "B"),
 
-      //       h("div", { key: "F", style: { background: "gold" } }, "F"),
-      //       h("div", { key: "G", style: { background: "gold" } }, "G"),
-      //     ])
-      // }
+            //       h("div", { key: "D", style: { background: "gold" } }, "D"),
+            //       h("div", { key: "E", style: { background: "gold" } }, "E"),
+            //       h("div", { key: "C", style: { background: "gold" } }, "C"),
+            //       h("div", { key: "H", style: { background: "gold" } }, "H"),
 
+            //       h("div", { key: "F", style: { background: "gold" } }, "F"),
+            //       h("div", { key: "G", style: { background: "gold" } }, "G"),
+            //     ])
+            // }
+
+        }
     }
-  }
-  // return () => {
-  //   return h("div", { key: "a" }, state[2])
-  // }
-  // }
-  // abcdefg
-  // abdechfg
-  setTimeout(() => {
-    state.num++;
-  }, 1000);
-  createApp(app).mount("#app");
+    // return () => {
+    //   return h("div", { key: "a" }, state[2])
+    // }
+    // }
+    // abcdefg
+    // abdechfg
+    setTimeout(() => {
+        // state.num++;
+        state.num = 2;
+        state.num = 3;
+        state.num = 4;
+        state.num = 5;
+        state.num = 6;
+    }, 1000);
+    createApp(app).mount("#app");
 </script>
 
 </html>

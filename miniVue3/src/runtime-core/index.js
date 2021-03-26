@@ -1,7 +1,7 @@
 
 import { createComponentIstance, setUpComponent } from "./components"
 import { effect } from "../reactivity/effect"
-import { queueJob } from "./scheduler"
+import { queueJob, queuePostFlushCb, queuePreFlushCb } from "./scheduler"
 // runtime-core元素与各平台操作无关
 import { shapFlags } from "../share/index";
 
@@ -346,7 +346,10 @@ function baseCreateRenderer (options) {
                 const prev = instance.subTree;
                 const next = instance.render();
                 instance.subTree = next;
-                patch(prev, next, container)
+                patch(prev, next, container);
+                queuePostFlushCb(() => {
+                    console.log("postqueue")
+                })
             }
         }, { scheduler: queueJob }) // 更新时用queueJob将界面渲染添加为异步任务
     }

@@ -11,25 +11,33 @@ export const isIntegerKey = (key) => { return isString(key) && ("" + parseInt(ke
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 export const hasOwn = (target, key) => { return hasOwnProperty.call(target, key) }
 export const shapFlags = {
-  ELEMENT: 1,
-  FUNCTIONAL_COMPONENT: 1 << 1,
-  STATEFUL_COMPONENT: 1 << 2,
-  ARRAY_CHILD: 1 << 3,
-  TEXT_CHILD: 1 << 4
+    ELEMENT: 1,
+    FUNCTIONAL_COMPONENT: 1 << 1,
+    STATEFUL_COMPONENT: 1 << 2,
+    ARRAY_CHILD: 1 << 3,
+    TEXT_CHILD: 1 << 4
 }
 
 // 柯里化函数
 function createCurry (fn, arr = []) {
-  const len = fn.length;
-  return function (...args) {
-    args = [...arr, ...args];
-    if (len > args.length) {
-      return createCurry(fn, args);
+    const len = fn.length;
+    return function (...args) {
+        args = [...arr, ...args];
+        if (len > args.length) {
+            return createCurry(fn, args);
+        }
+        return fn(...args);
     }
-    return fn(...args);
-  }
 }
 // 判断类型
 function isType (type, val) {
-  return Object.prototype.toString.call(val) === `[object ${type}]`
+    return Object.prototype.toString.call(val) === `[object ${type}]`
 };
+
+export function callWithErrorHandling (fn) {
+    try {
+        fn()
+    } catch (err) {
+        console.log(err)
+    }
+}
